@@ -1,10 +1,11 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { getAuth } from 'firebase/auth'
 import {
-    updateDoc, 
+    updateDoc,
     doc,
     getDoc,
-    arrayUnion, 
+    arrayUnion,
     arrayRemove,
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
@@ -14,7 +15,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Loader from '../shared/Loader'
 
-function SaveListing({id}) {
+function SaveListing({ id }) {
 
     const auth = getAuth()
     const docRef = doc(db, 'users', auth.currentUser.uid)
@@ -24,11 +25,13 @@ function SaveListing({id}) {
 
     useEffect(() => {
         setLoading(true)
-        const getUserInfo = async () => {      
+        const getUserInfo = async () => {
             // GET USERS DOCUMENT
+            const auth = getAuth()
+            const docRef = doc(db, 'users', auth.currentUser.uid)
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-                setIsMember(true) 
+                setIsMember(true)
                 if (docSnap.data().savedListings) {
                     // check if saved and show icon
                     docSnap.data().savedListings.forEach(save => {
@@ -38,23 +41,23 @@ function SaveListing({id}) {
                     })
                 }
             }
-            setLoading(false) 
+            setLoading(false)
         }
         getUserInfo()
-        
-    }, [])
+
+    }, [id])
 
     const toggle = () => {
         setSaved(!saved)
     }
 
-    const onSave = async () =>{
+    const onSave = async () => {
         const docSnap = await getDoc(docRef)
 
-        if(!docSnap.data().savedListings) {
-            await updateDoc(docRef, {savedListings : [id]})
+        if (!docSnap.data().savedListings) {
+            await updateDoc(docRef, { savedListings: [id] })
         }
-        if(docSnap.data().savedListings) {
+        if (docSnap.data().savedListings) {
             await updateDoc(docRef, { savedListings: arrayUnion(id) })
         }
     }
@@ -67,25 +70,34 @@ function SaveListing({id}) {
         }
     }
 
-    if(loading) return <Loader show={loading}/>
-    
+    if (loading) return <Loader show={loading} />
+
     return isMember ? (<div>
-    <div className='hover:scale-110'>
-        <Tooltip title="Save this listing">
-            <IconButton
-                aria-label="save listing"
-                onClick={toggle}
-            >
-                {saved ? 
-                <FavoriteOutlinedIcon onClick={offSave}/> 
-                :
-                <FavoriteBorderOutlinedIcon onClick={onSave}/>}
-            </IconButton>
-        </Tooltip>
-    </div>
+        <div className='hover:scale-110'>
+            <Tooltip title="Save this listing">
+                <div
+                    onClick={toggle}
+                >
+                    {saved ?
+                        <IconButton
+                            aria-label="unsave listing"
+                            onClick={offSave}
+                        >
+                            <FavoriteOutlinedIcon /></IconButton>
+                        :
+                        <IconButton
+                            aria-label="save listing"
+                            onClick={onSave}>
+                            <FavoriteBorderOutlinedIcon /></IconButton>}
+                </div>
+            </Tooltip>
+        </div>
 
     </div >) : null
 
 }
 
+SaveListing.propTypes = {
+    id: PropTypes.string
+}
 export default SaveListing

@@ -1,10 +1,10 @@
-import {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import {
     collection, getDocs, query, where, orderBy, limit, startAfter
 } from 'firebase/firestore'
-import {db} from '../firebase.config'
-import {toast} from 'react-toastify'
+import { db } from '../firebase.config'
+import { toast } from 'react-toastify'
 import Loader from '../shared/Loader'
 import ListingItem, { ListingItemSkeleton } from '../components/ListingItem'
 import Button from '@mui/material/Button'
@@ -130,39 +130,39 @@ const Category = () => {
                 listings && listings.length > 0
             ) ? (
                 <>
-                <main>
-                    <ul className="overflow-hidden">
-                        {listings.map((listing) => (
-                            <ListingItem
-                                listing={listing.data}
-                                id={listing.id}
-                                key={listing.id}
-                            />
-                        ))}
-                    </ul>
-                </main>
-                <br />
-                <div className='w-72 mx-auto'>
-                    {noMoreListings ? (
-                        <p className='font-semibold text-sm text-center'>
-                            No more listings....
-                        </p>
-                    ) : (
-                        <Button
-                        fullWidth
-                        disableElevation
-                            variant="contained"
-                            onClick={onFetchMoreListings}
-                            sx={{ textTransform: 'none' }}
-                        >Load more
-                        </Button>
-                    )} 
-                </div>
-                
+                    <main>
+                        <ul className="overflow-hidden">
+                            {listings.map((listing) => (
+                                <ListingItem
+                                    listing={listing.data}
+                                    id={listing.id}
+                                    key={listing.id}
+                                />
+                            ))}
+                        </ul>
+                    </main>
+                    <br />
+                    <div className='w-72 mx-auto'>
+                        {noMoreListings ? (
+                            <p className='font-semibold text-sm text-center'>
+                                No more listings....
+                            </p>
+                        ) : (
+                            <Button
+                                fullWidth
+                                disableElevation
+                                variant="contained"
+                                onClick={onFetchMoreListings}
+                                sx={{ textTransform: 'none' }}
+                            >Load more
+                            </Button>
+                        )}
+                    </div>
+
                 </>
             ) : (<p>No listings for {params.categoryName}</p>)}
         </div>
     </>);
 }
- 
+
 export default Category;

@@ -19,6 +19,8 @@
   --toastify-toast-max-width: 270px !important;
   --toastify-toast-min-height: 64px !important;
   --toastify-toast-max-height: 65px !important;
+
+  --brand-color: #e74c3c !important;
 }
 
 html::-webkit-scrollbar {
@@ -44,7 +46,7 @@ body#bud .app-bg {
   transform-origin: 50% 50%;
 }
 
-div.listingItemCard:hover p.locationName {
+.listingItemCard:hover p.locationName {
   text-decoration: underline !important;
   text-decoration-thickness: 1.5px !important;
 }
@@ -65,26 +67,25 @@ a:hover {
   flex-wrap: wrap;
   gap: 25px;
 }
-.editListingImg [type=checkbox] {
+input.checkedImg:checked {
+  height: 28px;
+  width: 28px;
+  background-color: #ddd !important;
+  color: #ccc;
+}
+/*.editListingImg [type=checkbox] {
   position: absolute;
-  top: 20px;
+  bottom: 20px;
   right: 20px;
   height: 30px;
   width: 30px;
-}
+  color: #ddd !important;
+  background: #000 !important;
+}*/
 .editListingImg {
-  width: 290px;
-  height: 230px;
-  border-radius: 25px;
+  height: 180px;
+  border-radius: 8px;
   position: relative;
-}
-.editListingImgText {
-  position: absolute;
-  top: 5px;
-  padding: 10px;
-  font-weight: bold;
-  color: white;
-  background-color: black;
 }
 
 
@@ -272,144 +273,6 @@ body#bud .swiper-pagination-fraction::selection {
   margin-right: 15px;
 }
 
-.navbar {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: #ffffff;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.navbarNav {
-  width: 100%;
-  overflow-y: hidden;
-}
-
-.navbarListItems {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.navbarListItem {
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.navbarListItem p {
-  margin-top: 0.5rem;
-  font-size: 14px !important;
-  font-weight: 600;
-  color: #8f8f8f;
-}
-
-.navbarListItemName,
-.navbarListItemNameActive {
-  margin-top: 0.45rem !important;
-  color: #8f8f8f;
-}
-.navbarListItemNameActive {
-  margin-top: 0.5rem !important;
-  color: #000 !important;
-}
-
-.forgotPasswordLink {
-  cursor: pointer;
-  color: #e74c3c;
-  font-weight: 500;
-  text-align: right;
-}
-
-
-
-.signInText,
-.signUpText {
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.socialLogin {
-  margin-top: 4rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.socialIconDiv {
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.75rem;
-  margin: 1.5rem;
-  width: 3rem;
-  height: 3rem;
-  background-color: #ffffff;
-  border-radius: 50%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
-}
-
-.socialIconImg {
-  width: 100%;
-}
-
-@media (min-width: 1217px) {
-  .explore {
-    margin-bottom: 10rem;
-  }
-}
-@media (max-height: 536) {
-  .explore {
-    margin-bottom: 10rem;
-  }
-}
-
-
-
-
-
-
-
-
-.exploreCategories a {
-  width: 48%;
-}
-
-.exploreCategoryImg {
-  min-height: 210px;
-  height: 10vw;
-  width: 100%;
-  border-radius: 1.5rem;
-  object-fit: cover;
-  object-position: 50% 50%;
-  margin: 0 auto;
-}
-
-.exploreCategoryName {
-  font-weight: 500;
-  text-align: left;
-}
-
-.category {
-  margin-bottom: 10rem;
-}
-
-.categoryListing {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  position: relative;
-}
-
 a.categoryListingLink {
   color: inherit !important;
 }
@@ -433,71 +296,6 @@ a.categoryListingLink {
   font-weight: 600;
   font-size: 1.25rem;
   margin: 0;
-} */
-
-/* .categoryListingPrice {
-  margin-top: 0.5rem;
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #e74c3c;
-  margin-bottom: 0;
-  display: flex;
-  align-items: center;
-} */
-
-/* .categoryListingInfoDiv {
-  display: flex;
-  justify-content: space-between;
-  max-width: 275px;
-}
-
-.categoryListingInfoText {
-  font-weight: 500;
-  font-size: 0.7rem;
-} */
-
-.loadMore {
-  cursor: pointer;
-  width: 8rem;
-  margin: 0 auto;
-  text-align: center;
-  padding: 0.25rem 0.5rem;
-  background-color: #000000;
-  color: #ffffff;
-  font-weight: 600;
-  border-radius: 1rem;
-  opacity: 0.7;
-  margin-top: 2rem;
-}
-
-.listingDetails {
-  margin-bottom: 10rem;
-}
-
-.shareIconDiv {
-  cursor: pointer;
-  position: fixed;
-  top: 3%;
-  right: 5%;
-  z-index: 2;
-  background-color: #ffffff;
-  border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
-.listingDetailsList {
-  padding: 0;
-  list-style-type: none;
-}
-.listingDetailsList li {
-  margin: 0.3rem 0;
-  font-weight: 500;
-  opacity: 0.8;
 }
 
 .leafletContainer {
@@ -644,12 +442,6 @@ a.categoryListingLink {
   padding: 0;
 }
 
-.formLabel {
-  font-size: 16px !important;
-  font-weight: 500;
-  display: block;
-}
-
 #bud .focusBlack:focus {
   outline: 1px solid #212121;
 }
@@ -664,42 +456,9 @@ a.categoryListingLink {
   display: flex !important;
 }
 
-/*.formButton,
-.formInput,
-.formInputAddress,
-.formInputName,
-.formInputSmall,
-.formInputFile,
-.formButtonActive {
-  padding: 0.9rem 3rem;
-  background-color: #ffffff;
-  font-weight: 600;
-  border-radius: 1rem;
-  font-size: 1rem;
-  margin: 0.5rem 0.5rem 0 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}*/
-
 .formInputdev {
   font-family: 'Montserrat', sans-serif;
 }
-/*.formInput,
-.formInputAddress,
-.formInputName,
-.formInputSmall,
-.formInputFile {
-  border: none;
-  outline: none;
-  font-family: 'Montserrat', sans-serif;
-}*/
-/*.formInputSmall,
-.formInputFile {
-  margin-right: 3rem;
-  padding: 0.9rem 0.7rem;
-  text-align: center;
-}*/
 
 .formInputAddress {
   padding: 0.9rem 1rem;
@@ -717,11 +476,6 @@ a.categoryListingLink {
   font-weight: 600;
 }
 
-.imagesInfo {
-  font-size: 0.9rem;
-  opacity: 0.75;
-}
-
 .formInputFile::file-selector-button {
   background-color: #e74c3c;
   border: none;
@@ -730,10 +484,6 @@ a.categoryListingLink {
   padding: 0.5rem 0.75rem;
   border-radius: 1rem;
   margin-right: 1rem;
-}
-.fileInputDiv {
-  border: 1px solid #ccc;
-  border-radius: 1rem;
 }
 
 .createListingButton {

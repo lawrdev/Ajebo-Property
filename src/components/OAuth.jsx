@@ -1,13 +1,13 @@
-import {useLocation, useNavigate} from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
     getAuth, signInWithPopup, GoogleAuthProvider
 } from 'firebase/auth'
-import {doc, setDoc, getDoc, serverTimestamp} from 'firebase/firestore'
-import {db} from '../firebase.config'
-import {toast} from 'react-toastify'
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '../firebase.config'
+import { toast } from 'react-toastify'
 // import GoogleIcon from '@mui/icons-material/Google'
 import { ReactComponent as GoogleIcon } from '../assets/svg/googleIcon.svg'
-import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button'
 
 const OAuth = () => {
     const navigate = useNavigate()
@@ -17,7 +17,7 @@ const OAuth = () => {
         try {
             const auth = getAuth()
             const provider = new GoogleAuthProvider()
-            
+
             const result = await signInWithPopup(auth, provider)
             toast.info('Please wait...', {
                 autoClose: 2000
@@ -29,7 +29,7 @@ const OAuth = () => {
             const docSnapshot = await getDoc(docRef)
 
             // if user doesn't exist, create user
-            if(!docSnapshot.exists()) {
+            if (!docSnapshot.exists()) {
                 await setDoc(doc(db, 'users', user.uid), {
                     name: user.displayName,
                     email: user.email,
@@ -45,20 +45,22 @@ const OAuth = () => {
     }
 
     return (
-        <div className="w-fit mx-auto flex flex-col justify-center items-center my-3">
-            <p className="mt-1 mb-2 text-sm">
+        <div className=" my-3">
+            <p className="mt-1 mb-2 text-sm text-center">
                 Sign {location.pathname === '/sign-up' ? 'up' : 'in'} with
             </p>
-            <IconButton 
-            fullWidth
-            variant="text"
-            aria-label="google"
-            onClick={onGoogleClick}
-            className="w-12 h-12 app-bg">
-                <GoogleIcon alt='google' width='100%' height='100%'/>
-            </IconButton>
+            <div>
+                <Button
+                    sx={{ textTransform: 'none' }}
+                    fullWidth
+                    variant="outlined"
+                    onClick={onGoogleClick}
+                    startIcon={<GoogleIcon alt='google' height='20px' width='24px' />}>
+                    <span className='text-gray-900'>oogle</span>
+                </Button>
+            </div>
         </div>
     )
 }
- 
+
 export default OAuth;

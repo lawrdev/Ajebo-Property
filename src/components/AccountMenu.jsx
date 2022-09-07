@@ -19,10 +19,10 @@ import InfoIcon from '@mui/icons-material/Info';
 import SettingsIcon from '@mui/icons-material/Settings'
 import Skeleton from '@mui/material/Skeleton'
 
-let pic;
 export default function AccountMenu({ isHome }) {
 
   const auth = getAuth()
+  const [loggedIn, setLoggedIn] = useState(false)
   const [loading, setLoading] = useState(false)
   const [userInfo, setUserInfo] = useState({
     name: 'My Profile',
@@ -34,25 +34,24 @@ export default function AccountMenu({ isHome }) {
       setLoading(true)
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          
+          setLoggedIn(true)
           if (auth.currentUser) {
             const docRef = doc(db, 'users', auth.currentUser.uid)
-            getDoc(docRef).then((docSnap) =>{
+            getDoc(docRef).then((docSnap) => {
               if (docSnap.exists()) {
                 setUserInfo((prevState) => ({
                   ...prevState,
                   name: docSnap.data().name,
                   profilePic: docSnap.data().profilePic,
                 }))
-
-                pic = docSnap.data().profilePic;
               }
-            }).catch((err) => console.error(err)) 
+            }).catch((err) => console.error(err))
           }
 
         } else {
-          console.log('user not found')
-        }})
+          //console.log('user not found')
+        }
+      })
 
       setLoading(false)
     }
@@ -77,11 +76,11 @@ export default function AccountMenu({ isHome }) {
     navigate('/sign-in')
   }
 
-  if(loading) return (
+  if (loading) return (
     <Skeleton variant="circular" width={40} height={40} />
   )
 
-  return (
+  return (loggedIn ? (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         <Tooltip title="Account settings">
@@ -97,7 +96,7 @@ export default function AccountMenu({ isHome }) {
                 alt='settings'
                 sx={{ width: 32, height: 32 }}
               />
-            ) : ( 
+            ) : (
               <Avatar
                 alt='account info'
                 sx={{ width: 32, height: 32, backgroundColor: '#808080' }}
@@ -146,12 +145,12 @@ export default function AccountMenu({ isHome }) {
         <MenuItem>
           <Avatar
             alt='profile'
-            src={profilePic ? profilePic : null}  
+            src={profilePic ? profilePic : null}
           />{name}
         </MenuItem>
         <MenuItem>
           <Link to={auth.currentUser && `/saved/${auth.currentUser.uid}`} className='text-inherit flex justify-center items-center gap-2'>
-            <FavoriteIcon sx={{ width: 26, height: 26, color: '#707070' }} className='self-center' />Saved Listings 
+            <FavoriteIcon sx={{ width: 26, height: 26, color: '#707070' }} className='self-center' />Saved Listings
           </Link>
         </MenuItem>
         <Divider />
@@ -179,7 +178,9 @@ export default function AccountMenu({ isHome }) {
           Logout
         </MenuItem>
       </Menu>
-    </>
+    </>) : (
+    null
+  )
   );
 }
 
@@ -190,12 +191,44 @@ AccountMenu.propTypes = {
   isHome: PropTypes.bool,
 }
 
-export const AvatarNavbar = () =>{
+export const AvatarNavbar = () => {
 
-  return(
-    <Avatar
-      sx={{ width: 24, height: 24, backgroundColor: '#808080' }}
-      src={pic ? pic : ''}
-    />
+  const [profilePic, setProfilePic] = useState(null)
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const auth = getAuth();
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          setLoggedIn(true)
+          const docRef = doc(db, 'users', user.uid);
+          const docSnap = await getDoc(docRef)
+          if (docSnap.exists()) {
+            setProfilePic(docSnap.data().profilePic)
+          }
+        } else {
+          setLoggedIn(false)
+        }
+      });
+    }
+    checkUser()
+  }, [])
+
+  return (<>{
+    loggedIn ? (
+      <Avatar
+        sx={{ width: 24, height: 24, backgroundColor: '#808080' }}
+        src={profilePic ? profilePic : ''}
+      />
+    ) : (
+      <Avatar
+        sx={{ width: 24, height: 24, backgroundColor: '#808080' }}
+      />
+    )
+  }
+
+  </>
+
   )
 }

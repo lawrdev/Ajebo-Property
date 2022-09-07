@@ -1,6 +1,5 @@
-import { useState, useEffect} from 'react'
-// import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import {Link, useParams} from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import {
   doc,
   getDoc,
@@ -8,7 +7,7 @@ import {
 import { db } from '../firebase.config'
 import Loader from '../shared/Loader'
 import BackBtn from '../shared/BackBtn'
-import ListingItem from '../components/ListingItem'
+import ListingItem, { ListingItemSkeleton } from '../components/ListingItem'
 
 
 const Saved = () => {
@@ -17,7 +16,7 @@ const Saved = () => {
   const [loading, setLoading] = useState(false)
   const params = useParams()
 
-  useEffect(() =>{
+  useEffect(() => {
     setLoading(true)
     const getUserInfo = async () => {
       // get user's saved listings
@@ -30,10 +29,6 @@ const Saved = () => {
             return savedLists.push(save)
           })
           // get listings obj for each listing Id
-          // let savedListsObjArry = []
-          // savedLists.forEach(listId => {
-          //   const getObj = async () => {
-          //     const listingRef = doc(db, 'listings', listId)
           const promiseArray = savedLists.map(async (listId) => {
             const listingRef = doc(db, 'listings', listId)
             const listingDocSnap = await getDoc(listingRef)
@@ -45,32 +40,17 @@ const Saved = () => {
             }
           })
           const savedListObjArry = await Promise.all(promiseArray)
-          //   const listingDocSnap = await getDoc(listingRef)
-          //   if (listingDocSnap.data()) {
-          //     let obj = {};
-          //     obj.id = listId;
-          //     obj.data = listingDocSnap.data();
-          //     savedListsObjArry.push(obj)
-          //   }
-          // }
-          // getObj()
-          setListings(savedListsObjArry)
+          setListings(savedListObjArry)
           console.log(savedListObjArry)
         }
-
-        
         setLoading(false)
-        // TODO: to fix 
-        // setTimeout(() => {
-
-        // }, 1000)
 
       } else { console.log('error no doc data') }
     }
     getUserInfo()
   }, [params.userId])
-  
-  if(loading) return <Loader show={loading}/>
+
+  // if (loading) return <Loader show={loading} />
 
   return (
     <div className='pageContainer px-6'>
@@ -80,18 +60,21 @@ const Saved = () => {
           Your saved listings</h2>
       </header>
 
-      <main>{(listings && listings.length > 0) ? (
-        < ul > {
-          listings.map(item => (
-            <ListingItem key={item.id} listing={item.data} id={item.id} />
-          ))
-        }
-        </ul>
-      ) : (
-        <p>
-          You have no saved listings. <Link to='/category/rent'>View and save your favorites listings.</Link></p>
-      )
-      }</main>
+      {loading ? (<ListingItemSkeleton />) : (
+        <main>{(listings && listings.length > 0) ? (
+          < ul > {
+            listings.map(item => (
+              <ListingItem key={item.id} listing={item.data} id={item.id} />
+            ))
+          }
+          </ul>
+        ) : (
+          <p>
+            You have no saved listings. <Link to='/category/rent'>View and save your favorites listings.</Link></p>
+        )
+        }</main>
+      )}
+
     </div>
   )
 }

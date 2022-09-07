@@ -1,25 +1,21 @@
-import {Link} from 'react-router-dom'
-import { getAuth } from 'firebase/auth'
-import ExploreSlider from '../components/ExploreSlider';
-import IconButton from '@mui/material/IconButton';
+import { Link } from 'react-router-dom'
+import ExploreSlider from '../components/ExploreSlider'
 import Stack from '@mui/material/Stack'
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Badge from '@mui/material/Badge'
 import CardSliderRent from '../components/CardSliderRent'
 import HotelIcon from '@mui/icons-material/Hotel'
 import HouseIcon from '@mui/icons-material/House';
 import CardSliderSale from '../components/CardSliderSale'
 import ExploreMap from '../components/ExploreMap';
-import AccountMenu from '../components/AccountMenu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import AccountMenu from '../components/AccountMenu'
 import Divider from '@mui/material/Divider'
 import Navbar from '../components/Navbar';
 import IntroTop from '../components/IntroTop';
 import Button from '@mui/material/Button'
-
+import Footer from '../components/Footer'
+import Notice from '../components/Notice'
+import { ReactComponent as Logo } from '../assets/brandlogo2.svg'
 
 const Explore = () => {
-    const auth = getAuth();
 
     return (
         <div className='pb-3 max-w-5xl mx-auto'>
@@ -28,17 +24,15 @@ const Explore = () => {
                 <div className='rounded-xl mx-2 absolute z-50 top-6 left-0 right-0 px-3 py-1 bg-white'>
                     <header className='flex justify-between items-center'>
                         <Link to='/'>
-                            <p className='text-brand text-sm font-semibold cursor-pointer'>
+                            <p className='text-brand text-sm font-semibold cursor-pointer flex items-center gap-2'>
+                                <Logo className='text-brand' fill='#e74c3c' />
                                 AjeboProperty
                             </p>
                         </Link>
                         <div>
                             <Stack direction="row" spacing={1} className='flex justify-center items-center'>
-                                <IconButton aria-label="add an alarm">
-                                    <Badge color="primary" variant="dot" >
-                                        <NotificationsIcon />
-                                    </Badge>
-                                </IconButton>
+                                <Notice />
+
                                 <div>
                                     <AccountMenu isHome={true} />
                                 </div>
@@ -54,12 +48,11 @@ const Explore = () => {
                 </div>
 
                 <div>
-
                     <div className='px-6 my-10 max-w-lg'>
                         <h2 className='text-xl font-light'>Sell and list your property on AjeboProperty and open your home to rental income</h2>
-                        <Button 
-                        className='!rounded-full mt-2'
-                        variant="outlined">Create a listing</Button>
+                        <Button
+                            className='!rounded-full mt-2'
+                            variant="outlined">Create a listing</Button>
                     </div>
 
                     <Divider textAlign="left" role='presentation' className='text-sm font-semibold text-gray-400 px-6'>Categories</Divider>
@@ -155,10 +148,13 @@ const Explore = () => {
 
             </main>
             {/* footer here */}
+            <div className='mt-20'>
+                <Footer />
+            </div>
 
             <Navbar />
         </div>
     )
 }
- 
+
 export default Explore;

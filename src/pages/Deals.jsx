@@ -1,6 +1,6 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import useFetchListings from '../hooks/useFetchListings'
-import Loader from '../shared/Loader'
+// import Loader from '../shared/Loader'
 import ListingItem, { ListingItemSkeleton } from '../components/ListingItem'
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -22,13 +22,13 @@ const Deals = () => {
 
     const { loading, listings } = useFetchListings()
 
-    useEffect(()=>{
+    useEffect(() => {
         if (listings) {
             let rentData = []
             let saleData = []
             // console.log(listings)
             listings.forEach((item) => {
-                
+
                 if (item.data.offer && item.data.type === 'rent') {
                     rentData.push(item)
                 }
@@ -36,15 +36,15 @@ const Deals = () => {
                     saleData.push(item)
                 }
             })
-    
+
             setRentListings(rentData)
             setSaleListings(saleData)
             setOfferAvailable(true)
         }
     }, [listings])
-    
+
     return (<>
-        <div className="category" style={{ backgroundColor:'#f2f4f8'}}>
+        <div className="category" style={{ backgroundColor: '#f2f4f8' }}>
             <header className="mb-6 px-6">
                 <p className='font-bold text-lg'>
                     Deals
@@ -54,8 +54,8 @@ const Deals = () => {
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} >
-                            <Tab label="Rent" {...a11yProps(0)}/>
-                            <Tab label="Sale" {...a11yProps(1)}/>
+                            <Tab label="Rent" {...a11yProps(0)} />
+                            <Tab label="Sale" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
                 </Box>
@@ -64,32 +64,32 @@ const Deals = () => {
             {loading ? <div className='px-6'><ListingItemSkeleton /></div> : (
                 offerAvailable && listings.length > 0) ? (
                 <>
-                <main className='mt-2'>
-                    <TabPanel value={value} index={0}>
-                        <ul className="categoryListings">
-                            {rentListings.map((listing) => (
-                                <ListingItem
-                                    listing={listing.data}
-                                    id={listing.id}
-                                    key={listing.id}
-                                />
-                            ))}
-                        </ul>
-                    </TabPanel>
-                    <TabPanel value={value} index={1}>
-                        <ul className="categoryListings">
-                            {saleListings.map((listing) => (
-                                <ListingItem
-                                    listing={listing.data}
-                                    id={listing.id}
-                                    key={listing.id}
-                                />
-                            ))}
-                        </ul>
-                    </TabPanel>
-                </main>
+                    <main className='mt-2'>
+                        <TabPanel value={value} index={0}>
+                            <ul className="categoryListings">
+                                {rentListings.map((listing) => (
+                                    <ListingItem
+                                        listing={listing.data}
+                                        id={listing.id}
+                                        key={listing.id}
+                                    />
+                                ))}
+                            </ul>
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                            <ul className="categoryListings">
+                                {saleListings.map((listing) => (
+                                    <ListingItem
+                                        listing={listing.data}
+                                        id={listing.id}
+                                        key={listing.id}
+                                    />
+                                ))}
+                            </ul>
+                        </TabPanel>
+                    </main>
                 </>
-                ) : (<p className='px-6 mt-4 font-semibold'>There are no current deals</p>)}
+            ) : (<p className='px-6 mt-4 font-semibold'>There are no current deals</p>)}
 
             <Navbar />
         </div>
@@ -113,7 +113,7 @@ function TabPanel(props) {
         </div>
     )
 }
-  
+
 TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
@@ -126,5 +126,5 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     }
 }
- 
+
 export default Deals;

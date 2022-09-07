@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import {Link} from 'react-router-dom'
-import {getAuth, sendPasswordResetEmail} from 'firebase/auth'
-import {toast} from 'react-toastify'
+import { Link } from 'react-router-dom'
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
+import { toast } from 'react-toastify'
 import TextField from '@mui/material/TextField'
 import { CustomButton } from '../customs/Buttons'
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
@@ -25,7 +25,7 @@ const ForgotPassword = () => {
     }
 
     return (
-        <div className="pageContainer">
+        <div className="pageContainer px-6">
             <header>
                 <p className="font-bold text-lg mb-4">Forgot Password</p>
             </header>
@@ -61,9 +61,9 @@ const ForgotPassword = () => {
                 </Link>
 
             </main>
-            
+
         </div>
     );
 }
- 
+
 export default ForgotPassword;
