@@ -3,7 +3,6 @@ import blackLogo from '../assets/blacklogo2.png'
 
 function Footer() {
     return (<>
-
         <footer className="p-4 sm:p-6">
             <div className="md:flex md:justify-between md:gap-3">
                 <div className="mb-6 md:mb-0">
@@ -14,9 +13,9 @@ function Footer() {
                 </div>
                 <div className="md:ml-6 grid grid-cols-2 gap-6 sm:gap-6 sm:grid-cols-3">
                     <div>
-                        <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">Resources</h2>
+                        <h2 className="mb-3 text-sm font-semibold text-gray-900 uppercase ">Resources</h2>
                         <ul className="text-sm text-gray-600 dark:text-gray-400">
-                            <li className="mb-4">
+                            <li className="mb-1">
                                 <p className="hover:underline">AjeboProperty</p>
                             </li>
                             <li>
@@ -25,9 +24,9 @@ function Footer() {
                         </ul>
                     </div>
                     <div>
-                        <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Follow us</h2>
+                        <h2 className="mb-3 text-sm font-semibold text-gray-900 uppercase">Follow us</h2>
                         <ul className="text-sm text-gray-600 dark:text-gray-400">
-                            <li className="mb-4">
+                            <li className="mb-1">
                                 <p className="hover:underline ">Github</p>
                             </li>
                             <li>
@@ -36,9 +35,9 @@ function Footer() {
                         </ul>
                     </div>
                     <div>
-                        <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Legal</h2>
+                        <h2 className="mb-3 text-sm font-semibold text-gray-900 uppercase">Legal</h2>
                         <ul className="text-sm text-gray-600 dark:text-gray-400">
-                            <li className="mb-4">
+                            <li className="mb-1">
                                 <p className="hover:underline">Privacy Policy</p>
                             </li>
                             <li>
@@ -76,7 +75,6 @@ function Footer() {
                 </div>
             </div>
         </footer>
-
     </>)
 }
 

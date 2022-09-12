@@ -28,7 +28,8 @@ import Divider from '@mui/material/Divider'
 import PhotoCamera from '@mui/icons-material/PhotoCamera'
 import IconButton from '@mui/material/IconButton'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
-
+import { motion } from "framer-motion"
+import CirProgress from '../shared/CirProgress'
 
 const initialFormState = {
     type: 'rent',
@@ -50,11 +51,13 @@ const initialFormState = {
 const CreateListing = () => {
     const [geolocationEnabled, setGeolocationEnabled] = useState(true)
     const [loading, setLoading] = useState(false)
+    const [uploading, setUploading] = useState(false)
     const [formData, setFormData] = useState(initialFormState)
     // added images
     const [addedImages, setAddedImages] = useState([])
     // for discount toggle
     const [checked, setChecked] = useState(false)
+    const [uploadProgress, setUploadProgress] = useState(0)
 
     // destructure from fromData
     const {
@@ -77,6 +80,7 @@ const CreateListing = () => {
 
     // TODO: replace useEffect with our useAuthStatus hook< add 'id'
     useEffect(() => {
+        setLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setFormData({
@@ -88,7 +92,7 @@ const CreateListing = () => {
                 navigate('/sign-in')
             }
         })
-
+        setLoading(false)
         return unsubscribe
     }, [auth, navigate])
 
@@ -135,16 +139,16 @@ const CreateListing = () => {
     // on submit of form
     const onSubmit = async (e) => {
         e.preventDefault()
-        setLoading(true)
+        setUploading(true)
 
         if (discountedPrice >= regularPrice) {
-            setLoading(false)
+            setUploading(false)
             toast.error('Discounted price needs to be less than regular price')
             return
         }
 
         if (addedImages.length > 10) {
-            setLoading(false)
+            setUploading(false)
             toast.error('Max 10 images')
             return
         }
@@ -173,7 +177,7 @@ const CreateListing = () => {
 
             // if location is unfined
             if (location === undefined || location.includes('undefined')) {
-                setLoading(false)
+                setUploading(false)
                 toast.error('Please enter a correct address')
                 return
             }
@@ -204,6 +208,7 @@ const CreateListing = () => {
                     (snapshot) => {
                         const progress =
                             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        setUploadProgress(progress)
                         console.log('Upload is ' + progress + '% done')
                         switch (snapshot.state) {
                             case 'paused':
@@ -232,7 +237,7 @@ const CreateListing = () => {
         const imageUrls = await Promise.all(
             [...addedImages].map(({ data }) => storeImage(data))
         ).catch(() => {
-            setLoading(false)
+            setUploading(false)
             toast.error('Images not uploaded')
             return
         })
@@ -254,16 +259,40 @@ const CreateListing = () => {
         // save to database
         const docRef = await addDoc(collection(db, 'listings'), formDataCopy)
 
-        setLoading(false)
+        setUploading(false)
         toast.success('You listing has been saved!')
         // navigate to new listing
         navigate(`/category/${formDataCopy.type}/${docRef.id}`)
     }
 
+    const pageAnimate = {
+        hidden: {
+            opacity: 0,
+        },
+        visible: {
+            opacity: 1,
+            transition: {
+                delay: .1, duration: 1
+            }
+        },
+        exit: {
+            x: '-100vw',
+            opacity: 0,
+            transition: { ease: 'easeInOut' }
+        }
+    }
+
     if (loading) return <Loader show={loading} />
 
+    if (uploading) return <CirProgress value={uploadProgress} />
+
     return (
-        <div className='profile px-6'>
+        <motion.div className='profile px-6'
+            variants={pageAnimate}
+            initial='hidden'
+            animate='visible'
+            exit='exit'
+        >
             <BackBtn />
             <header className='flex font-bold text-lg mb-4'>
                 <p className='pageHeader'>
@@ -598,6 +627,7 @@ const CreateListing = () => {
                                                 key={index}>
                                                 <div
                                                     className="editListingImg overflow-hidden max-w-sm mx-auto"
+                                                    data-aos="zoom-in"
                                                 >
                                                     <img
                                                         alt='listings piccc'
@@ -621,6 +651,7 @@ const CreateListing = () => {
                                                 </div>
                                             </Grid>
                                         ))}
+
                                     </Grid>
                                 </Box>
                             </div>
@@ -670,7 +701,7 @@ const CreateListing = () => {
                     </form>
                 </div>
             </main>
-        </div>
+        </motion.div>
     );
 }
 

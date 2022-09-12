@@ -26,13 +26,17 @@ import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import PhotoCamera from '@mui/icons-material/PhotoCamera'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
+import { motion } from "framer-motion"
+import CirProgress from '../shared/CirProgress'
 
 //! TODO: Apply Restriction on Geoapify API keys specific to this website after deployment
 
 function EditListing() {
   const [geolocationEnabled, setGeolocationEnabled] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true)
+  const [uploading, setUploading] = useState(false)
   const [listing, setListing] = useState(null)
+  const [uploadProgress, setUploadProgress] = useState(0)
   // added images
   const [addedImages, setAddedImages] = useState([])
 
@@ -121,18 +125,18 @@ function EditListing() {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
+    setUploading(true)
 
     // Verify that discounted price is lower than regular
     if (discountedPrice >= regularPrice) {
-      setLoading(false);
+      setUploading(false)
       toast.error('Discounted Price must be lower than Regular Price');
       return;
     }
 
     // // Verify Images are 10 or less
     if (totalNumImages > 10) {
-      setLoading(false);
+      setUploading(false);
       toast.error('Images exceed 10');
     }
 
@@ -159,7 +163,7 @@ function EditListing() {
 
       // Throw error if location wasn't returned, i.e evaluates to undefined
       if (location === undefined || location.includes('undefined')) {
-        setLoading(false);
+        setUploading(false)
         toast.error('Please enter a correct address');
         return;
       }
@@ -191,8 +195,9 @@ function EditListing() {
           (snapshot) => {
             // Observe state change events such as progress, pause, and resume
             // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-            // const progress =
-            //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress)
             // console.log('Upload is ' + progress + '% done')
             switch (snapshot.state) {
               case 'paused':
@@ -224,7 +229,7 @@ function EditListing() {
     const availableImageStorage =
       (listing.imageUrls.length - imagesToRemove.length) + addedImages.length
     if (availableImageStorage > 10) {
-      setLoading(false);
+      setUploading(false)
       toast.error(
         'Image Upload failed - Too many total images for this listing'
       )
@@ -237,7 +242,7 @@ function EditListing() {
       newStoredImageUrls = await Promise.all(
         [...addedImages].map(({ data }) => storeImage(data))
       ).catch(() => {
-        setLoading(false);
+        setUploading(false)
         toast.error('Images not uploaded');
         return;
       });
@@ -269,8 +274,8 @@ function EditListing() {
         .catch((error) => {
           console.log(error);
           // admin imgs deletion fail - img links
-          toast.error('Deletion failed');
-          setLoading(false);
+          // toast.error('Deletion failed');
+          setUploading(false)
         });
     });
 
@@ -310,7 +315,7 @@ function EditListing() {
     // Update in firestore
     const docRef = doc(db, 'listings', params.listingId);
     await updateDoc(docRef, formDataCopy);
-    setLoading(false);
+    setUploading(false)
     toast.success('Listing successfully updated');
     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   }
@@ -382,10 +387,33 @@ function EditListing() {
     }
   };
 
+  const pageAnimate = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: .1, duration: 0.4
+      }
+    },
+    exit: {
+      x: '-100vw',
+      opacity: 0,
+      transition: { ease: 'easeInOut', duration: 0.2 }
+    }
+  }
+
+  if (uploading) return <CirProgress value={uploadProgress} />
+
   if (loading) return <Spinner />
 
   return (
-    <div className="profile">
+    <motion.div className="profile"
+      variants={pageAnimate}
+      initial='hidden'
+      animate='visible'
+      exit='exit'>
       <div className="px-6">
         <BackBtn />
         <header className='flex font-bold text-lg mb-4'>
@@ -952,7 +980,7 @@ function EditListing() {
           </form>
         </div>
       </main>
-    </div>
+    </motion.div>
   );
 }
 

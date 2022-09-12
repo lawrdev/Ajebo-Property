@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Navbar from '../components/Navbar';
+import { motion, AnimatePresence } from 'framer-motion';
 
 
 
@@ -43,8 +44,30 @@ const Deals = () => {
         }
     }, [listings])
 
-    return (<>
-        <div className="category" style={{ backgroundColor: '#f2f4f8' }}>
+    const pageAnimate = {
+        hidden: {
+            opacity: 0,
+        },
+        visible: {
+            opacity: 1,
+            transition: {
+                delay: .1, duration: 0.4
+            }
+        },
+        exit: {
+            x: '-100vw',
+            opacity: 0,
+            transition: { ease: 'easeInOut', duration: 0.2 }
+        }
+    }
+
+    return (
+        <motion.div className="category" style={{ backgroundColor: '#f2f4f8' }}
+            variants={pageAnimate}
+            initial='hidden'
+            animate='visible'
+            exit='exit'
+        >
             <header className="mb-6 px-6">
                 <p className='font-bold text-lg'>
                     Deals
@@ -69,6 +92,7 @@ const Deals = () => {
                             <ul className="categoryListings">
                                 {rentListings.map((listing) => (
                                     <ListingItem
+                                        flip={true}
                                         listing={listing.data}
                                         id={listing.id}
                                         key={listing.id}
@@ -80,6 +104,7 @@ const Deals = () => {
                             <ul className="categoryListings">
                                 {saleListings.map((listing) => (
                                     <ListingItem
+                                        flip={true}
                                         listing={listing.data}
                                         id={listing.id}
                                         key={listing.id}
@@ -90,10 +115,8 @@ const Deals = () => {
                     </main>
                 </>
             ) : (<p className='px-6 mt-4 font-semibold'>There are no current deals</p>)}
-
-            <Navbar />
-        </div>
-    </>);
+        </motion.div>
+    )
 }
 
 function TabPanel(props) {

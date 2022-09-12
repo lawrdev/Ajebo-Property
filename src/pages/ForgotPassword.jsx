@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 import TextField from '@mui/material/TextField'
 import { CustomButton } from '../customs/Buttons'
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import { motion } from "framer-motion"
+
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('')
@@ -24,24 +26,47 @@ const ForgotPassword = () => {
         }
     }
 
+    const pageAnimate = {
+        hidden: {
+            opacity: 0,
+        },
+        visible: {
+            opacity: 1,
+            transition: {
+                delay: .1, duration: 0.4
+            }
+        },
+        exit: {
+            x: '-100vw',
+            opacity: 0,
+            transition: { ease: 'easeInOut', duration: 0.2 }
+        }
+    }
+
     return (
-        <div className="pageContainer px-6">
+        <motion.div className="pageContainer px-6"
+            variants={pageAnimate}
+            initial='hidden'
+            animate='visible'
+            exit='exit'
+        >
             <header>
                 <p className="font-bold text-lg mb-4">Forgot Password</p>
             </header>
 
-            <main>
-                <p className="mb-2">Please provide us with the email address linked to your account</p>
-                <form onSubmit={onSubmit}>
+            <main className='pt-6'>
+                <p className='font-semibold text-gray-500'>Please provide us with the email address linked to your account</p>
+                <form onSubmit={onSubmit} className='mt-4'>
                     <TextField
                         required
                         fullWidth
+                        color='black'
                         id="email"
                         defaultValue={email}
                         onChange={onChange}
                         type="email"
                         label="Email address"
-                        variant="standard" />
+                        variant="outlined" />
                     <CustomButton
                         disableElevation
                         endIcon={<DoubleArrowIcon />}
@@ -52,7 +77,7 @@ const ForgotPassword = () => {
                     >
                         Send reset link</CustomButton>
                 </form>
-                <div className="orDividerContainer my-3 w-full overflow-hidden">
+                <div className="orDividerContainer my-10 w-full overflow-hidden">
                     <span className="orDivider">or</span>
                 </div>
 
@@ -62,7 +87,7 @@ const ForgotPassword = () => {
 
             </main>
 
-        </div>
+        </motion.div>
     );
 }
 

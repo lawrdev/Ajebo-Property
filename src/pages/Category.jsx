@@ -5,11 +5,12 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import { toast } from 'react-toastify'
-import Loader from '../shared/Loader'
+// import Loader from '../shared/Loader'
 import ListingItem, { ListingItemSkeleton } from '../components/ListingItem'
 import Button from '@mui/material/Button'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import Divider from '@mui/material/Divider'
+import { motion } from "framer-motion"
 
 const Category = () => {
     const [listings, setListings] = useState(null)
@@ -100,8 +101,30 @@ const Category = () => {
         }
     }
 
+    const pageAnimate = {
+        hidden: {
+            opacity: 0,
+        },
+        visible: {
+            opacity: 1,
+            transition: {
+                delay: .1, duration: 0.4
+            }
+        },
+        exit: {
+            x: '-100vw',
+            opacity: 0,
+            transition: { ease: 'easeInOut', duration: 0.2 }
+        }
+    }
+
     return (<>
-        <div className="category px-6">
+        <motion.div className="category px-6"
+            variants={pageAnimate}
+            initial='hidden'
+            animate='visible'
+            exit='exit'
+        >
             <div className="flex items-center pb-2">
                 <Button variant="text"
                     onClick={() => { window.history.go(-1) }}
@@ -161,7 +184,7 @@ const Category = () => {
 
                 </>
             ) : (<p>No listings for {params.categoryName}</p>)}
-        </div>
+        </motion.div>
     </>);
 }
 

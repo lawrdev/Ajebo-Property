@@ -8,7 +8,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/a11y'
-import Loader from '../shared/Loader'
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 
@@ -20,77 +19,69 @@ function CardSliderRent() {
     useEffect(() => {
         const fetchListings = async () => {
             const listingsRef = collection(db, 'listings')
-            const q = query(listingsRef, orderBy('timestamp'), limit(10))
+            const q = query(listingsRef, orderBy('timestamp', "desc"), limit(10))
             const querySnap = await getDocs(q)
 
-            let listings = []
+            let listingsArr = []
 
             querySnap.forEach((doc) => {
-                return listings.push({
+                return listingsArr.push({
                     id: doc.id,
                     data: doc.data(),
                 })
             })
-
-            setListings(listings)
+            setListings(listingsArr)
             setLoading(false)
         }
-
         fetchListings()
     }, [])
-
-    
 
     if (loading) return <CardSliderRentSkeleton />
 
     if (listings.length === 0) return <></>
-    
+
     let rentImages = []
 
     if (listings && listings.length > 0) {
-        
-        listings.forEach(({ data:{ type, imageUrls } }) => {
 
-            if( type === 'rent') {
-                imageUrls.forEach((img) =>{
-                    rentImages.push(img) 
-                })  
+        listings.forEach(({ data: { type, imageUrls } }) => {
+            if (type === 'rent') {
+                rentImages.push(imageUrls[0])
             }
-            
         })
 
     }
 
     return (
-        <div className='cardSlider rounded-3xl overflow-hidden shadow-md'>
+        <div className='cardSlider rounded-xl overflow-hidden shadow-md'>
             <div className=''>
-            <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-                slidesPerView={1}
-                pagination={{
-                    dynamicBullets: true,
-                }}
-                navigation={true}
-            >
-                {rentImages.map((img, index) => {
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+                    slidesPerView={1}
+                    pagination={{
+                        dynamicBullets: true,
+                    }}
+                    navigation={true}
+                >
+                    {rentImages.map((img, index) => {
 
-                    return (
-                        <SwiperSlide
-                            key={index}
-                            className='overflow-hidden'
-                        >
-                            <div
-                                style={{
-                                    background: `url(${img}) center no-repeat`,
-                                    backgroundSize: 'cover'
-                                }}
-                                className='p-28 cardZoom duration-700'
+                        return (
+                            <SwiperSlide
+                                key={index}
+                                className='overflow-hidden'
                             >
-                            </div>
-                        </SwiperSlide>
-                    )
-                })}
-            </Swiper>
+                                <div
+                                    style={{
+                                        background: `url(${img}) center no-repeat`,
+                                        backgroundSize: 'cover'
+                                    }}
+                                    className='p-28 cardZoom duration-700'
+                                >
+                                </div>
+                            </SwiperSlide>
+                        )
+                    })}
+                </Swiper>
             </div>
         </div>
     )
@@ -98,15 +89,14 @@ function CardSliderRent() {
 
 
 export function CardSliderRentSkeleton() {
-  return (<>
-      <Stack spacing={1}>
-        <div className='rounded-3xl overflow-hidden'>
-            <Skeleton variant="rounded" width={390} height={230} />
-        </div>
-      </Stack>
-  </>)
+    return (<>
+        <Stack spacing={1}>
+            <div className='rounded-xl overflow-hidden'>
+                <Skeleton variant="rounded" width={390} height={230} />
+            </div>
+        </Stack>
+    </>)
 }
 
 
 export default CardSliderRent
-    

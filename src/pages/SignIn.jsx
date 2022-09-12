@@ -10,6 +10,7 @@ import { CustomTextField } from '../customs/Inputs'
 import { CustomButton } from '../customs/Buttons'
 import { Button } from '@mui/material'
 import OAuth from '../components/OAuth'
+import { motion } from "framer-motion"
 
 const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false)
@@ -45,88 +46,108 @@ const SignIn = () => {
 
     }
 
+    const pageAnimate = {
+        hidden: {
+            opacity: 0,
+        },
+        visible: {
+            opacity: 1,
+            transition: {
+                delay: .1, duration: 0.4
+            }
+        },
+        exit: {
+            x: '-100vw',
+            opacity: 0,
+            transition: { ease: 'easeInOut', duration: 0.2 }
+        }
+    }
+
     return (
-        <>
-            <div className="app-bg">
-                <header className='mb-4 pt-4'>
-                    <BrandName size="28px" />
-                </header>
-                <div className="mx-auto max-w-sm pb-5">
-                    <div className=" bg-white rounded-lg border border-gray-200 shadow-md px-3 mt-3">
-                        <p className="text-sm font-semibold text-center my-4">Welcome back!
-                        </p>
-                        <form onSubmit={onSubmit}>
+        <motion.div className="app-bg"
+            variants={pageAnimate}
+            initial='hidden'
+            animate='visible'
+            exit='exit'
+        >
+            <header className='mb-4 pt-4'>
+                <BrandName size="28px" />
+            </header>
+            <div className="mx-auto max-w-sm pb-5">
+                <div className=" bg-white rounded-lg border border-gray-200 shadow-md px-3 mt-3">
+                    <p className="text-sm font-semibold text-center my-4">Welcome back!
+                    </p>
+                    <form onSubmit={onSubmit}>
+                        <CustomTextField
+                            required
+                            fullWidth
+                            type="email"
+                            defaultValue={email}
+                            onChange={onChange}
+                            id="email"
+                            label="Email address"
+                            variant="outlined"
+                            className="border-gray-300 text-md text-gray-400" />
+
+                        <div className="relative mt-3">
                             <CustomTextField
                                 required
                                 fullWidth
-                                type="email"
-                                defaultValue={email}
+                                type={showPassword ? 'text' : 'password'}
+                                defaultValue={password}
                                 onChange={onChange}
-                                id="email"
-                                label="Email address"
-                                variant="outlined"
-                                className="border-gray-300 text-md text-gray-400" />
+                                autoComplete="current-password"
+                                id='password'
+                                label="Password" variant="outlined"
+                                className="order-gray-300 text-md text-gray-400" />
 
-                            <div className="relative mt-3">
-                                <CustomTextField
-                                    required
-                                    fullWidth
-                                    type={showPassword ? 'text' : 'password'}
-                                    defaultValue={password}
-                                    onChange={onChange}
-                                    autoComplete="current-password"
-                                    id='password'
-                                    label="Password" variant="outlined"
-                                    className="order-gray-300 text-md text-gray-400" />
-
-                                <div
-                                    className="absolute right-0 top-0 translate-y-1/2 mr-2 mt-1 z-20">
-                                    <IoEyeSharp
-                                        title='show password'
-                                        size='1.35em'
-                                        className={
-                                            !showPassword ? 'opacity-30' : ''
-                                        }
-                                        onClick={() => setShowPassword((prevState) => !prevState)}
-                                    />
-                                </div>
-
+                            <div
+                                className="absolute right-0 top-0 translate-y-1/2 mr-2 mt-1 z-20">
+                                <IoEyeSharp
+                                    title='show password'
+                                    size='1.35em'
+                                    className={
+                                        !showPassword ? 'opacity-30' : ''
+                                    }
+                                    onClick={() => setShowPassword((prevState) => !prevState)}
+                                />
                             </div>
-                            <Link to='/forgot-password' className='ml-auto text-xs mt-1 w-fit'>
-                                Forgotten password?
-                            </Link>
-                            <CustomButton
-                                fullWidth
-                                disableElevation
-                                type="submit"
-                                variant="contained"
-                                size='large'
-                                className="mt-4 font-bold"
-                            >
-                                Log In</CustomButton>
-                        </form>
 
-                        {/* Google OAuth */}
-                        <OAuth />
+                        </div>
+                        <Link to='/forgot-password' className='ml-auto text-xs mt-1 w-fit'>
+                            Forgotten password?
+                        </Link>
+                        <CustomButton
+                            fullWidth
+                            disableElevation
+                            type="submit"
+                            variant="contained"
+                            size='large'
+                            className="mt-4 font-bold"
+                        >
+                            Log In</CustomButton>
+                    </form>
 
-                        <div className="orDividerContainer mt-12 mb-3 w-full overflow-hidden">
-                            <span className="orDivider">or</span>
-                        </div>
-                        <div className="text-center mb-8 mt-2">
-                            <Button
-                                color="secondary"
-                                disableElevation
-                                variant="contained"
-                                onClick={() => navigate('/sign-up')}
-                                sx={{ textTransform: 'none' }}
-                            >
-                                Create a new account
-                            </Button>
-                        </div>
+                    {/* Google OAuth */}
+                    <OAuth />
+
+                    <div className="orDividerContainer mt-12 mb-3 w-full overflow-hidden">
+                        <span className="orDivider">or</span>
+                    </div>
+                    <div className="text-center mb-8 mt-2">
+                        <Button
+                            color="secondary"
+                            disableElevation
+                            variant="contained"
+                            onClick={() => navigate('/sign-up')}
+                            sx={{ textTransform: 'none' }}
+                        >
+                            Create a new account
+                        </Button>
                     </div>
                 </div>
             </div>
-        </>
+        </motion.div>
     );
 }
 
